@@ -1,0 +1,28 @@
+---
+name: 'Build'
+
+on:
+  push:
+  pull_request:
+
+
+jobs:
+  one:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set color
+      id: set-matrix
+      run: |
+        content=`cat .github/flavors.json|jq ".[]"  -r`
+        echo "MATRIX=$CONTENT" >> $GITHUB_OUTPUT
+  two:
+    needs:
+      - one
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix: ${{fromJson(needs.one.get-matrix.outputs.MATRIX)}}
+    steps:
+      - name: "running {{ matrix.flavor }}"
+        run: echo "running {{ matrix.flavor}}"
