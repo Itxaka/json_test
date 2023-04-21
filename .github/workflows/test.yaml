@@ -16,7 +16,7 @@ jobs:
       run: |
         content=`cat .github/flavors.json|jq ".[]"  -r`
         echo $content
-        echo "MATRIX=$content" >> $GITHUB_OUTPUT
+        echo "MATRIX=\"$content\"" >> $GITHUB_OUTPUT
   two:
     needs:
       - one
